@@ -30,3 +30,4 @@ task-specific notes live in [`notes/`](notes/), and runnable tools in
 - **"How do I get to chapter X, section Y"** → [`notes/nextmap.md`](notes/nextmap.md)
 - **"What does cvar Z do"** → [`notes/cvars.md`](notes/cvars.md), then [`cvar_flags_and_gates.md`](cvar_flags_and_gates.md) if it's flagged/gated
 - **"Where did the console output go"** → [`notes/layer_logging.md`](notes/layer_logging.md)
+- **"Unlimited sprint / stamina"** → [`notes/cvars.md`](notes/cvars.md) § Sprint / stamina

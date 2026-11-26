@@ -247,6 +247,38 @@ r_currentMaterial, r_debugSingleLightName, r_jointName, r_logLevel, r_showLightC
 | `pm_jumpheight` | `52` | Jump height (default 52). |
 | `pm_crouchspeed` | `100` | Crouch movement speed (default 100). |
 
+### Sprint / stamina (unlimited sprint)
+
+No console command grants unlimited stamina in this build — nothing in the
+functional command list, and no stamina toggle among the 296 removed-in-retail
+stubs. The sprint timer is cvar-driven instead. All of these are gate-blocked
+(declared flags `0x4` → runtime `0x2000C`); unlock with the flags patch
+(`../cvar_flags_and_gates.md`) and then `set`, or skip the patch entirely and
+write the value directly at the Value RVA.
+
+| CVar | Default | Meaning | Object RVA | Flags RVA (→ 131088) | Value RVA |
+|---|---:|---|---|---|---|
+| `pm_sprintMaxTime` | `5000` | ms of continuous sprint before tiring | `0x9C5D170` | `0x9C5D1B8` | `0x9C5D198` |
+| `pm_sprintChargeTime` | `3000` | ms to recharge after tiring | `0x9C5D1F0` | `0x9C5D238` | `0x9C5D218` |
+| `pm_sprintFullSpeedTime` | `3000` | ms at full speed before decay | `0x9C5D370` | `0x9C5D3B8` | `0x9C5D398` |
+| `pm_sprintRechargeIntervalTime` | `1000` | recharge tick interval | `0x9C5D270` | `0x9C5D2B8` | `0x9C5D298` |
+| `pm_sprintspeed` | `255` | sprint speed | `0x9C5CFF0` | `0x9C5D038` | `0x9C5D018` |
+
+```text
+set pm_sprintMaxTime 600000      ; ~10 minutes of sprint — effectively unlimited
+```
+
+Avoid `0`: a zeroed max-time could make the stamina check degenerate; a large
+value keeps the timer math intact. If the value snaps back after a map load
+(cheat-reset pass), re-apply after the map is up, or use the Value RVA write,
+which doesn't care about the gate.
+
+- The DLC kid (Julia) has her own set: `pm_kid_sprintMaxTime` (default `4000`),
+  `pm_kid_sprintShotgunMaxTime`, `pm_kid_sprintChargeTime`, …
+- There is also an upgrade-driven stamina layer
+  (`tngDeclPlayerUpgrade::staminaUpgrade_t`, `athletic.staminaMax` in the
+  resource params) that may scale the effective max on top of the cvar.
+
 ### Camera / HUD
 
 | CVar | Default | What it does |
