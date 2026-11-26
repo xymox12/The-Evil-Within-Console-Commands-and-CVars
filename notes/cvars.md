@@ -1,8 +1,14 @@
 # The Evil Within — CVar Reference
 
-Companion to `console_cmds.md`. Covers the retail Windows build.
+Companion to `../console_cmds.md`. Covers the retail Windows build.
 
 **3326 cvars** registered. Use `set <name> <value>`, `listCvars`, `find <text>`.
+
+**Flags column**: the hex values are the *declared* registration flags, not what
+the cvar system stores at runtime — the registrar normalizes them, and the
+console `set` command silently refuses most of them in retail (production gate).
+What the bits mean, the runtime values, and how to make a gated cvar settable:
+see `../cvar_flags_and_gates.md`.
 
 ## Usage (g_, pm_ and r_)
 

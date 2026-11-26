@@ -4,7 +4,7 @@ Reference for the retail Windows build of The Evil Within.
 
 | | |
 |---|---|
-| Target | `Epic\TheEvilWithin\EvilWithin.exe` |
+| Target | `EvilWithin.exe` in the game's install folder |
 | Engine | id Tech 5 ("Tango") — same command system as RAGE / Wolfenstein: TNO |
 
 ## Summary
@@ -304,7 +304,9 @@ Notes:
   through the decl system, so a bad name prints `Unknown projectile decl '<name>'`. Use
   `listDecls` (or `find`) to enumerate valid decl names.
 - `set` / `seta` refuse to touch read-only cvars (`%s is read only`) and report
-  `Archived CVar '%s' in production mode` — relevant when a `set` appears to do nothing.
+  `Archived CVar '%s' in production mode` — relevant when a `set` appears to do
+  nothing. The full flag/gate decode and the patch recipes are in
+  `cvar_flags_and_gates.md`.
 - `nextmap` prints `syntax: nextMap <mapname> <checkpoint>` and only works while a map is
   running (`nextMap only works if a map is running!`).
 - `killEntity` / `reloadEntity` both require an entity name and print
@@ -661,11 +663,16 @@ development build), not a switch flipped.
 
 - Console commands are only half of the system: the game also registers a much
   larger set of **cvars** (`r_*`, `com_*`, `g_*`, `player_*`, `vt_*`, …) in a separate
-  `idCVar` system. Those are documented in `cvars.md` (3,326 entries, with defaults and
+  `idCVar` system. Those are documented in `notes/cvars.md` (3,326 entries, with defaults and
   per-cvar usage notes).
 - `base/release.cfg` ships with `con_noPrint 1`, `com_allowDebugCommandMode 0` and
   `com_allowDebugGui 0`; `base/default.cfg` controls the rest. Those gate console
   visibility/output, not the command table itself.
+- **There is no console-to-file command in this build.** `conDump` is in the removed list
+  above, and the engine's `idLogFileWriter` is constructed but never registered in the
+  print-listener list, so `logFile` / `logFileName` / `logFile_SystemRunning` are inert.
+  See `notes/layer_logging.md` for a runtime patch that links the writer in and produces
+  `base\qconsole.log`.
 - `base/consoleHistory.txt` in this install shows the exact spellings that were
   previously typed on this machine (`find teleport`, `toggledebugcamera`,
   `noclip`, `god`, `Com_showFPS`, `list`, …), which matches the table above.
